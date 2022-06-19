@@ -69,10 +69,17 @@ Oh, can you guess what I want from this one:
 
 - shooter
 
-Yep, projectiles... Oh OH! OKAY, I'll stop meandering now,
+Yep, projectiles... Oh, OH! OKAY, I'll stop meandering now,
 an idea is taking shape and these two are its outline:
 
 - horror
 - adventure
 
+## Setting
+
+This, but without accurate physics simulations:
+
+- [degenerate era][timelapse-of-the-future]
+
 [two-headed-calf]: https://rolfpotts.com/two-headed-calf-by-laura-gilpin/
+[timelapse-of-the-future]: https://www.youtube.com/watch?v=uD4izuDMUQA
