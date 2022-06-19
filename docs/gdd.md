@@ -46,4 +46,33 @@ This one is spooky:
 
 These three words are great. Let's keep going and decide later.
 
+## Genre
+
+Tough choice. Let's start with what is not going to be:
+
+- platformer
+- puzzle
+- strategy
+- sports
+- sandbox
+- idle
+- simulation
+- visual novel
+
+So nothing too common, complex, or that I can't do in an interesting way.
+This may be and outlier as well:
+
+- rpg
+
+Nevertheless, I would pick one or two mechanics from it.
+Oh, can you guess what I want from this one:
+
+- shooter
+
+Yep, projectiles... Oh OH! OKAY, I'll stop meandering now,
+an idea is taking shape and these two are its outline:
+
+- horror
+- adventure
+
 [two-headed-calf]: https://rolfpotts.com/two-headed-calf-by-laura-gilpin/
