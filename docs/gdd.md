@@ -89,6 +89,10 @@ This is the idea:
 
 - live the last moments of a civilization as their only source of energy vanishes
 
+### Feel
+
+- gliding, almost ethereal
+
 ## Gameplay
 
 ### Objectives
