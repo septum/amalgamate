@@ -93,6 +93,12 @@ This is the idea:
 
 - gliding, almost ethereal
 
+### Aesthetic
+
+- palette with three colors
+- pixel blobs
+- dynamic environment
+
 ## Gameplay
 
 ### Objectives
