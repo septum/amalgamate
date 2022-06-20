@@ -1,6 +1,8 @@
 # GDD
 
-## Theme
+## Overview
+
+### Theme
 
 ![An abstract image representing the theme](assets/theme.png)
 
@@ -46,7 +48,7 @@ This one is spooky:
 
 These three words are great. Let's keep going and decide later.
 
-## Genre
+### Genre
 
 Tough choice. Let's start with what is not going to be:
 
@@ -75,17 +77,49 @@ an idea is taking shape and these two are its outline:
 - horror
 - adventure
 
-## Setting
+### Setting
 
 This, but without accurate physics simulations:
 
 - [degenerate era][timelapse-of-the-future]
 
-## Concept
+### Concept
 
 This is the idea:
 
 - live the last moments of a civilization as their only source of energy vanishes
+
+## Gameplay
+
+### Objectives
+
+- prevent the befall of a civilization
+
+### Progression
+
+Through exploration of your surroundings, communicating to other entities and uncovering mysteries, the game moves forward with its narrative.
+
+### Duration
+
+Around 5 minutes, but with replayability.
+
+### Difficulty
+
+Easy, but heightened by its mysteries.
+
+### Loops
+
+#### Primary
+
+Explore your surrondings and interact with its content.
+
+#### Secondary
+
+Encounter entities and communicate with them.
+
+#### Tertiary
+
+Uncover and solve mysteries.
 
 [two-headed-calf]: https://rolfpotts.com/two-headed-calf-by-laura-gilpin/
 [timelapse-of-the-future]: https://www.youtube.com/watch?v=uD4izuDMUQA
