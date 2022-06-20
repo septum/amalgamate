@@ -81,5 +81,11 @@ This, but without accurate physics simulations:
 
 - [degenerate era][timelapse-of-the-future]
 
+## Concept
+
+This is the idea:
+
+- live the last moments of a civilization as their only source of energy vanishes
+
 [two-headed-calf]: https://rolfpotts.com/two-headed-calf-by-laura-gilpin/
 [timelapse-of-the-future]: https://www.youtube.com/watch?v=uD4izuDMUQA
