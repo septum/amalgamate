@@ -131,5 +131,24 @@ Encounter entities and communicate with them.
 
 Uncover and solve mysteries.
 
+## Interface
+
+### Input
+
+Small set of controls that can be remapped:
+
+- movement (arrow keys by default)
+- action (space key by default)
+
+### HUD
+
+Minimal visuals with the intention of maximizing immersion:
+
+- wave-detector
+
+### GUI
+
+Big surfaces with a solid color and subtitle-like text.
+
 [two-headed-calf]: https://rolfpotts.com/two-headed-calf-by-laura-gilpin/
 [timelapse-of-the-future]: https://www.youtube.com/watch?v=uD4izuDMUQA
