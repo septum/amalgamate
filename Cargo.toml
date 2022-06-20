@@ -1,5 +1,5 @@
 [package]
-name = "rusty_jam_2"
+name = "amalgamate"
 version = "0.1.0"
 authors = ["Orlando Valverde <orlando.jesig.va@gmail.com>"]
 edition = "2021"

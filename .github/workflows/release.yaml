@@ -9,7 +9,7 @@ on:
 
 env:
   # update with the name of the main binary
-  binary: rusty_jam_2
+  binary: amalgamate
 
 jobs:
   # Build for wasm

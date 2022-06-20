@@ -1,4 +1,4 @@
-# rusty_jam_2
+# amalgamate
 
 ## License
 

@@ -5,7 +5,7 @@ pub struct Plugin;
 impl BevyPlugin for Plugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(WindowDescriptor {
-            title: "Rusty Jam 2".to_string(),
+            title: "amalgamate".to_string(),
             ..Default::default()
         });
     }

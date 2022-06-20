@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_kira_audio::AudioPlugin;
 
-use rusty_jam_2::{
+use amalgamate::{
     config, game,
     resources::{self, prelude::*},
     scenes,

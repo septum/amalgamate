@@ -24,7 +24,7 @@ pub fn spawn(commands: &mut Commands, fonts: &Fonts) {
     let mut actions = Housing::percent(100.0, 90.0);
     let footer = Housing::percent(100.0, 10.0);
 
-    let title = EmbossedText::big("Rusty Jam 2", font);
+    let title = EmbossedText::big("amalgamate", font);
     let notice = SimpleText::small("https://septum.io", font);
     let play = Action::new("Play", font, button_size);
     let quit = Action::new("Quit", font, button_size);
