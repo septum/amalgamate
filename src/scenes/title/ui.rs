@@ -16,18 +16,18 @@ fn spawn_camera(commands: &mut Commands) {
 
 pub fn spawn(commands: &mut Commands, fonts: &Fonts) {
     let font = &fonts.dogica;
-    let button_size = Size::new(Val::Px(400.0), Val::Px(50.0));
+    let button_size = Size::new(Val::Px(400.0), Val::Px(60.0));
 
     let overlay = Overlay::new();
-    let top = Housing::percent(100.0, 50.0);
-    let bottom = Housing::percent(100.0, 50.0);
-    let mut actions = Housing::percent(100.0, 90.0);
-    let footer = Housing::percent(100.0, 10.0);
+    let top = Housing::percent(100.0, 25.0);
+    let bottom = Housing::percent(100.0, 25.0);
+    let mut actions = Housing::percent(100.0, 70.0);
+    let footer = Housing::percent(100.0, 30.0);
 
     let title = EmbossedText::big("amalgamate", font);
     let notice = SimpleText::small("https://septum.io", font);
-    let play = Action::new("Play", font, button_size);
-    let quit = Action::new("Quit", font, button_size);
+    let play = Action::new("play", font, button_size);
+    let quit = Action::new("quit", font, button_size);
 
     actions
         .justify_content(JustifyContent::SpaceEvenly)
