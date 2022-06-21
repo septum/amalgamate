@@ -17,7 +17,7 @@ fn spawn_camera(commands: &mut Commands) {
 pub fn spawn(commands: &mut Commands, fonts: &Fonts) {
     let font = &fonts.dogica;
     let overlay = Overlay::new();
-    let mut loading_text = SimpleText::big("Loading...", font);
+    let mut loading_text = SimpleText::big("loading...", font);
 
     loading_text.color(Colors::PRIMARY);
 
