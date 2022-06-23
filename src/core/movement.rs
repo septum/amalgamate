@@ -26,7 +26,7 @@ pub fn handle_input(keyboard_input: &Input<KeyCode>, movement: &mut Movement) {
     if keyboard_input.pressed(KeyCode::Up) {
         movement.thrust += THRUST_ACCELERATION_RATE;
     } else {
-        if movement.thrust < 0.0 {
+        if movement.thrust > 0.0 {
             movement.thrust -= THRUST_ACCELERATION_RATE;
         }
     }
