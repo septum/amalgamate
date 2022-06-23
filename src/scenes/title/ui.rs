@@ -16,11 +16,11 @@ fn spawn_camera(commands: &mut Commands) {
 
 pub fn spawn(commands: &mut Commands, fonts: &Fonts) {
     let font = &fonts.dogica;
-    let button_size = Size::new(Val::Px(400.0), Val::Px(60.0));
+    let button_size = Size::new(Val::Px(400.0), Val::Px(56.0));
 
     let overlay = Overlay::new();
-    let top = Housing::percent(100.0, 25.0);
-    let bottom = Housing::percent(100.0, 25.0);
+    let top = Housing::percent(100.0, 36.0);
+    let bottom = Housing::percent(100.0, 36.0);
     let mut actions = Housing::percent(100.0, 70.0);
     let footer = Housing::percent(100.0, 30.0);
 

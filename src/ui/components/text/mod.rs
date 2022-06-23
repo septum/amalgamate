@@ -11,6 +11,6 @@ const TEXT_ALIGNMENT: TextAlignment = TextAlignment {
     horizontal: HorizontalAlign::Center,
 };
 
-const SMALL_SIZE: f32 = 14.0;
-const MEDIUM_SIZE: f32 = 28.0;
+const SMALL_SIZE: f32 = 18.0;
+const MEDIUM_SIZE: f32 = 24.0;
 const BIG_SIZE: f32 = 42.0;

@@ -38,7 +38,7 @@ impl Default for Embossed {
             text: Text::with_section(
                 "",
                 TextStyle {
-                    color: Colors::DARK,
+                    color: Colors::DARKER,
                     ..style
                 },
                 TEXT_ALIGNMENT,

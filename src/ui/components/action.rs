@@ -46,7 +46,7 @@ impl Default for Action {
         let style = Style {
             justify_content: JustifyContent::Center,
             align_items: AlignItems::Center,
-            size: Size::new(Val::Percent(100.0), Val::Px(50.0)),
+            size: Size::new(Val::Percent(100.0), Val::Px(56.0)),
             ..Default::default()
         };
         let child = Simple::default();
@@ -65,7 +65,7 @@ impl Default for Action {
 impl Action {
     pub fn new<S: Into<String>>(value: S, font: &Handle<Font>, size: Size<Val>) -> Action {
         let mut child = Simple::medium(value, font);
-        child.color(Colors::DARK);
+        child.color(Colors::DARKER);
 
         let mut button = Action::default();
         button.bundle.style.size = size;
