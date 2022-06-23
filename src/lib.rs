@@ -4,7 +4,7 @@
 #![allow(clippy::needless_pass_by_value)]
 
 pub mod config;
-pub mod game;
+pub mod core;
 pub mod resources;
 pub mod scenes;
 pub mod ui;

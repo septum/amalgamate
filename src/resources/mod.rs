@@ -1,8 +1,9 @@
 mod colors;
 mod fonts;
+mod images;
 pub mod prelude;
 
-use crate::game;
+use crate::core::GameState;
 use bevy::prelude::{Plugin as BevyPlugin, *};
 use prelude::*;
 
@@ -10,30 +11,34 @@ pub struct Plugin;
 
 impl BevyPlugin for Plugin {
     fn build(&self, app: &mut App) {
-        app.add_system_set(SystemSet::on_enter(game::State::Startup).with_system(startup))
-            .add_system_set(SystemSet::on_update(game::State::Loading).with_system(check_loading));
+        app.add_system_set(SystemSet::on_enter(GameState::Startup).with_system(startup))
+            .add_system_set(SystemSet::on_update(GameState::Loading).with_system(check_loading));
     }
 }
 
 fn startup(
     mut commands: Commands,
-    mut state: ResMut<State<game::State>>,
+    mut state: ResMut<State<GameState>>,
     asset_server: Res<AssetServer>,
 ) {
     let fonts = Fonts::load(&asset_server);
-    commands.insert_resource(fonts);
+    let images = Images::load(&asset_server);
 
-    state.set(game::State::Loading).unwrap();
+    commands.insert_resource(fonts);
+    commands.insert_resource(images);
+
+    state.set(GameState::Loading).unwrap();
 }
 
 fn check_loading(
-    mut state: ResMut<State<game::State>>,
+    mut state: ResMut<State<GameState>>,
     asset_server: Res<AssetServer>,
     fonts: Res<Fonts>,
+    images: Res<Images>,
 ) {
-    let all_loaded = fonts.all_loaded(&asset_server);
+    let all_loaded = fonts.all_loaded(&asset_server) && images.all_loaded(&asset_server);
 
     if all_loaded {
-        state.set(game::State::Title).unwrap();
+        state.set(GameState::Title).unwrap();
     }
 }

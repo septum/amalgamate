@@ -6,7 +6,7 @@ use bevy::{
 };
 
 use crate::{
-    game,
+    core::GameState,
     resources::prelude::*,
     ui::{ActionKind, ActionMarker},
 };
@@ -15,11 +15,11 @@ pub struct Plugin;
 
 impl BevyPlugin for Plugin {
     fn build(&self, app: &mut App) {
-        app.add_system_set(SystemSet::on_enter(game::State::Title).with_system(setup))
+        app.add_system_set(SystemSet::on_enter(GameState::Title).with_system(setup))
             .add_system_set(
-                SystemSet::on_update(game::State::Title).with_system(buttons_interactions),
+                SystemSet::on_update(GameState::Title).with_system(buttons_interactions),
             )
-            .add_system_set(SystemSet::on_exit(game::State::Title).with_system(cleanup));
+            .add_system_set(SystemSet::on_exit(GameState::Title).with_system(cleanup));
     }
 }
 
@@ -28,7 +28,7 @@ fn setup(mut commands: Commands, fonts: Res<Fonts>) {
 }
 
 fn buttons_interactions(
-    mut game_state: ResMut<State<game::State>>,
+    mut game_state: ResMut<State<GameState>>,
     mut exit_event: EventWriter<AppExit>,
     mut mouse_button_input: ResMut<Input<MouseButton>>,
     mut query: Query<
@@ -45,7 +45,7 @@ fn buttons_interactions(
 
                 match action.kind() {
                     ActionKind::Play => {
-                        game_state.set(game::State::Play).unwrap();
+                        game_state.set(GameState::Play).unwrap();
                     }
                     ActionKind::Quit => {
                         exit_event.send(AppExit);

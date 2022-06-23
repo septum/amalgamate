@@ -10,15 +10,15 @@ impl Colors {
         alpha: 1.0,
     };
     pub const LIGHT: Color = Color::Rgba {
-        red: 227.0 / u8::MAX as f32,
-        green: 227.0 / u8::MAX as f32,
-        blue: 227.0 / u8::MAX as f32,
+        red: 240.0 / u8::MAX as f32,
+        green: 240.0 / u8::MAX as f32,
+        blue: 240.0 / u8::MAX as f32,
         alpha: 1.0,
     };
     pub const DARK: Color = Color::Rgba {
-        red: 28.0 / u8::MAX as f32,
-        green: 28.0 / u8::MAX as f32,
-        blue: 28.0 / u8::MAX as f32,
+        red: 14.0 / u8::MAX as f32,
+        green: 14.0 / u8::MAX as f32,
+        blue: 14.0 / u8::MAX as f32,
         alpha: 1.0,
     };
     pub const TRANSPARENT: Color = Color::Rgba {

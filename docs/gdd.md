@@ -121,7 +121,7 @@ Easy, but heightened by its mysteries.
 
 #### Primary
 
-Explore your surrondings and interact with its content.
+Explore your surroundings and interact with its content.
 
 #### Secondary
 

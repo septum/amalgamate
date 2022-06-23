@@ -2,7 +2,8 @@ use bevy::prelude::*;
 use bevy_kira_audio::AudioPlugin;
 
 use amalgamate::{
-    config, game,
+    config,
+    core::GameState,
     resources::{self, prelude::*},
     scenes,
 };
@@ -15,6 +16,6 @@ fn main() {
         .add_plugin(resources::Plugin)
         .add_plugin(scenes::Plugin)
         .insert_resource(ClearColor(Colors::DARK))
-        .add_state(game::State::Startup)
+        .add_state(GameState::Startup)
         .run();
 }
