@@ -11,10 +11,7 @@ use crate::{
     },
     resources::prelude::*,
 };
-use bevy::{
-    app::AppExit,
-    prelude::{Plugin as BevyPlugin, *},
-};
+use bevy::prelude::{Plugin as BevyPlugin, *};
 use bevy_kira_audio::Audio;
 
 pub struct Plugin;
