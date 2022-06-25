@@ -3,7 +3,7 @@ use bevy_prototype_lyon::prelude::*;
 
 use crate::resources::prelude::Colors;
 
-const BEAM_MAX_DISTANCE: f32 = 800.0;
+const BEAM_MAX_DISTANCE: f32 = 1_600.0;
 const RESONANCE_MIN_DISTANCE: f32 = 160.0;
 
 pub struct Exploration {

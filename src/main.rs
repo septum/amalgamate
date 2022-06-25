@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{input, prelude::*};
 use bevy_ecs_ldtk::prelude::*;
 use bevy_kira_audio::AudioPlugin;
 use bevy_prototype_lyon::prelude::*;
@@ -22,5 +22,6 @@ fn main() {
         .add_plugin(scenes::Plugin)
         .insert_resource(ClearColor(Colors::DARK))
         .add_state(GameState::Startup)
+        .add_system(input::system::exit_on_esc_system)
         .run();
 }

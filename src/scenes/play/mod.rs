@@ -15,6 +15,7 @@ use bevy::{
     app::AppExit,
     prelude::{Plugin as BevyPlugin, *},
 };
+use bevy_kira_audio::Audio;
 
 pub struct Plugin;
 
@@ -117,7 +118,7 @@ fn gravitational_attraction(
 }
 
 fn entity_collision(
-    mut exit_event: EventWriter<AppExit>,
+    mut game_state: ResMut<State<GameState>>,
     player_query: Query<&Transform, With<PlayerMarker>>,
     npcs_query: Query<&Transform, (With<NpcMarker>, Without<PlayerMarker>)>,
 ) {
@@ -128,8 +129,7 @@ fn entity_collision(
         let size = Vec2::splat(48.0);
 
         if physics::collision(source, size, target, size) {
-            // TODO: Do something interesting
-            exit_event.send(AppExit);
+            game_state.set(GameState::Title).unwrap();
         }
     }
 }
@@ -140,6 +140,8 @@ fn beam_reflection(
     player_query: Query<&Transform, With<PlayerMarker>>,
     npcs_query: Query<&Transform, With<NpcMarker>>,
     beams_query: Query<Entity, With<BeamMarker>>,
+    audio: Res<Audio>,
+    sounds: Res<Sounds>,
 ) {
     if exploration.beam {
         let player_transform = player_query.single();
@@ -148,6 +150,9 @@ fn beam_reflection(
             let target = npc_transform.translation.truncate();
             if exploration::beam_reflected(source, target) {
                 exploration::beam(&mut commands, source, target);
+                let audio_source = sounds.sfx.beam.clone();
+                let channel_id = &sounds.channels.sfx;
+                audio.play_in_channel(audio_source, channel_id);
             }
         }
     } else {
@@ -163,6 +168,8 @@ fn resonance_proximity(
     mut exploration: ResMut<Exploration>,
     player_query: Query<&Transform, With<PlayerMarker>>,
     npcs_query: Query<&Transform, With<NpcMarker>>,
+    audio: Res<Audio>,
+    sounds: Res<Sounds>,
 ) {
     if !interaction.orbit {
         if !exploration.resonance {
@@ -173,6 +180,9 @@ fn resonance_proximity(
                 exploration.resonance = exploration::in_resonance(source, target);
                 if exploration.resonance {
                     exploration::resonance(&mut commands, source, target);
+                    let audio_source = sounds.sfx.resonance.clone();
+                    let channel_id = &sounds.channels.sfx;
+                    audio.play_in_channel(audio_source, channel_id);
                     break;
                 }
             }
@@ -224,6 +234,8 @@ fn orbit_criteria(
     exploration: Res<Exploration>,
     source_resonance_query: Query<&Transform, With<SourceResonanceMarker>>,
     target_resonance_query: Query<&Transform, With<TargetResonanceMarker>>,
+    audio: Res<Audio>,
+    sounds: Res<Sounds>,
 ) {
     if exploration.resonance && exploration.beam && movement.thrust <= 40.0 {
         if let Ok(source_transform) = source_resonance_query.get_single() {
@@ -233,6 +245,9 @@ fn orbit_criteria(
                 let distance = source.distance(target);
                 if distance <= 160.0 && distance >= 128.0 {
                     interaction.orbit = true;
+                    let audio_source = sounds.sfx.absorption.clone();
+                    let channel_id = &sounds.channels.sfx;
+                    audio.play_in_channel(audio_source, channel_id);
                 }
             }
         }
