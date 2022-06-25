@@ -5,6 +5,7 @@ use bevy::{
     prelude::{Input, Plugin as BevyPlugin, *},
 };
 use bevy_ecs_ldtk::prelude::*;
+use bevy_kira_audio::Audio;
 
 use crate::{
     core::{map, spawn_camera, GameState},
@@ -26,7 +27,17 @@ impl BevyPlugin for Plugin {
     }
 }
 
-fn setup(mut commands: Commands, fonts: Res<Fonts>, ldtk: Res<Ldtk>) {
+fn setup(
+    mut commands: Commands,
+    fonts: Res<Fonts>,
+    ldtk: Res<Ldtk>,
+    audio: Res<Audio>,
+    sounds: Res<Sounds>,
+) {
+    let audio_source = sounds.music.ambiment.clone();
+    let channel_id = &sounds.channels.music;
+    audio.play_looped_in_channel(audio_source, channel_id);
+
     spawn_camera(&mut commands);
     map::spawn(&mut commands, &ldtk);
     ui::spawn(&mut commands, &fonts);

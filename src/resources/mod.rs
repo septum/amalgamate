@@ -2,6 +2,8 @@ mod colors;
 mod fonts;
 mod images;
 mod ldtk;
+mod sounds;
+
 pub mod prelude;
 
 use crate::core::GameState;
@@ -25,10 +27,12 @@ fn startup(
     let fonts = Fonts::load(&asset_server);
     let images = Images::load(&asset_server);
     let ldkt = Ldtk::load(&asset_server);
+    let sounds = Sounds::load(&asset_server);
 
     commands.insert_resource(fonts);
     commands.insert_resource(images);
     commands.insert_resource(ldkt);
+    commands.insert_resource(sounds);
 
     state.set(GameState::Loading).unwrap();
 }
@@ -39,10 +43,12 @@ fn check_loading(
     fonts: Res<Fonts>,
     images: Res<Images>,
     ldtk: Res<Ldtk>,
+    sounds: Res<Sounds>,
 ) {
     let all_loaded = fonts.all_loaded(&asset_server)
         && images.all_loaded(&asset_server)
-        && ldtk.all_loaded(&asset_server);
+        && ldtk.all_loaded(&asset_server)
+        && sounds.all_loaded(&asset_server);
 
     if all_loaded {
         state.set(GameState::Title).unwrap();
