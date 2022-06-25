@@ -71,7 +71,7 @@ name = "amalgamate"
 version = "0.1.0"
 dependencies = [
  "bevy",
- "bevy_hanabi",
+ "bevy_ecs_ldtk",
  "bevy_kira_audio",
  "bevy_prototype_lyon",
 ]
@@ -361,6 +361,34 @@ dependencies = [
 ]
 
 [[package]]
+name = "bevy_ecs_ldtk"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2d0661cd867975b3c56f05a6d910c5b1178b056be5111e11c18711b07906d290"
+dependencies = [
+ "anyhow",
+ "bevy",
+ "bevy_ecs_ldtk_macros",
+ "bevy_ecs_tilemap",
+ "hex",
+ "regex",
+ "serde",
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
+name = "bevy_ecs_ldtk_macros"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "05db2cd10653acc3788745719550c87f1f156f1ce610e84b1b8e89a3ede96aea"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "bevy_ecs_macros"
 version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -370,6 +398,18 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "bevy_ecs_tilemap"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c68fefad7aa09f9833d198c0fd1d9ebe58bf9ab3abf91cf912e4f5585227fb82"
+dependencies = [
+ "bevy",
+ "bytemuck",
+ "log",
+ "regex",
 ]
 
 [[package]]
@@ -409,22 +449,6 @@ dependencies = [
  "gltf",
  "percent-encoding",
  "thiserror",
-]
-
-[[package]]
-name = "bevy_hanabi"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "98dff35996adf6990e1abf884e951ea5c2c86d2525be7124578e89350e2ae97e"
-dependencies = [
- "anyhow",
- "bevy",
- "bitflags",
- "bytemuck",
- "rand",
- "rand_pcg",
- "ron",
- "serde",
 ]
 
 [[package]]
@@ -2500,15 +2524,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d34f1408f55294453790c48b2f1ebbb1c5b4b7563eb1f418bcfcfdbb06ebb4e7"
 dependencies = [
  "getrandom",
-]
-
-[[package]]
-name = "rand_pcg"
-version = "0.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "59cad018caf63deb318e5a4586d99a24424a364f40f1e5778c29aca23f4fc73e"
-dependencies = [
- "rand_core",
 ]
 
 [[package]]

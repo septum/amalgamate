@@ -14,13 +14,11 @@ opt-level = 1
 [features]
 default = ['bevy/dynamic']
 
+[dependencies.bevy_ecs_ldtk]
+version = "0.3.0"
+
 [dependencies.bevy_prototype_lyon]
 version = "0.5.0"
-
-[dependencies.bevy_hanabi]
-version = "0.2"
-default-features = false
-features = ["2d"]
 
 [dependencies.bevy]
 version = "0.7.0"

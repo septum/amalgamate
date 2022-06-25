@@ -14,7 +14,7 @@ impl Default for Embossed {
         let relief = 2.0;
         let style = TextStyle {
             font_size: MEDIUM_SIZE,
-            color: Colors::PRIMARY,
+            color: Colors::DARK,
             font: Handle::default(),
         };
         let foreground = TextBundle {
@@ -38,7 +38,7 @@ impl Default for Embossed {
             text: Text::with_section(
                 "",
                 TextStyle {
-                    color: Colors::DARKER,
+                    color: Colors::PRIMARY,
                     ..style
                 },
                 TEXT_ALIGNMENT,

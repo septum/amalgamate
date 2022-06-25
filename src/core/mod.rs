@@ -5,6 +5,7 @@ mod state;
 
 pub mod exploration;
 pub mod interaction;
+pub mod map;
 pub mod movement;
 pub mod physics;
 

@@ -54,7 +54,7 @@ impl Default for Action {
         Action {
             bundle: ButtonBundle {
                 style,
-                color: Colors::PRIMARY.into(),
+                color: Colors::DARK.into(),
                 ..Default::default()
             },
             child,
@@ -65,7 +65,7 @@ impl Default for Action {
 impl Action {
     pub fn new<S: Into<String>>(value: S, font: &Handle<Font>, size: Size<Val>) -> Action {
         let mut child = Simple::medium(value, font);
-        child.color(Colors::DARKER);
+        child.color(Colors::PRIMARY);
 
         let mut button = Action::default();
         button.bundle.style.size = size;

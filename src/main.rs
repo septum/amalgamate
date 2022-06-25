@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_ecs_ldtk::prelude::*;
 use bevy_kira_audio::AudioPlugin;
 use bevy_prototype_lyon::prelude::*;
 
@@ -14,6 +15,7 @@ fn main() {
         .insert_resource(Msaa { samples: 4 })
         .add_plugin(config::Plugin)
         .add_plugins(DefaultPlugins)
+        .add_plugin(LdtkPlugin)
         .add_plugin(ShapePlugin)
         .add_plugin(AudioPlugin)
         .add_plugin(resources::Plugin)

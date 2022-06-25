@@ -6,9 +6,8 @@ use crate::{
             TargetResonanceMarker,
         },
         interaction::{self, Interaction},
-        movement::{self, Movement, ROTATION_ACCELERATION_RATE, THRUST_ACCELERATION_RATE},
-        physics, spawn_camera, spawn_npc, spawn_player, CameraMarker, GameState, NpcMarker,
-        PlayerMarker,
+        movement::{self, Movement},
+        physics, spawn_npc, spawn_player, CameraMarker, GameState, NpcMarker, PlayerMarker,
     },
     resources::prelude::*,
 };
@@ -16,6 +15,7 @@ use bevy::{
     app::AppExit,
     prelude::{Plugin as BevyPlugin, *},
 };
+
 pub struct Plugin;
 
 impl BevyPlugin for Plugin {
@@ -58,7 +58,6 @@ fn setup(mut commands: Commands, images: Res<Images>) {
         Vec3::new(-2200.0, -200.0, 5.0),
         Vec3::new(-2400.0, 400.0, 5.0),
     ];
-    spawn_camera(&mut commands);
     spawn_player(&mut commands, &images);
     for npc_position in npc_positions {
         spawn_npc(
@@ -126,7 +125,7 @@ fn entity_collision(
     for npc_transform in npcs_query.iter() {
         let source = player_transform.translation.truncate();
         let target = npc_transform.translation.truncate();
-        let size = Vec2::splat(60.0);
+        let size = Vec2::splat(48.0);
 
         if physics::collision(source, size, target, size) {
             // TODO: Do something interesting
@@ -226,7 +225,7 @@ fn orbit_criteria(
     source_resonance_query: Query<&Transform, With<SourceResonanceMarker>>,
     target_resonance_query: Query<&Transform, With<TargetResonanceMarker>>,
 ) {
-    if exploration.resonance && exploration.beam && movement.thrust <= 35.0 {
+    if exploration.resonance && exploration.beam && movement.thrust <= 40.0 {
         if let Ok(source_transform) = source_resonance_query.get_single() {
             if let Ok(target_transform) = target_resonance_query.get_single() {
                 let source = source_transform.translation.truncate();
@@ -261,7 +260,7 @@ fn orbit_resonance(
             let new_y = (source.x * sin + source.y * cos) + target.y;
             player_transform.translation.x = new_x;
             player_transform.translation.y = new_y;
-            movement.rotation = -(ROTATION_ACCELERATION_RATE * 500.0);
+            movement.rotation = 0.51;
         }
     }
 }
@@ -294,7 +293,7 @@ fn orbit_absorption(
             }
         } else if !exploration.resonance {
             interaction.orbit = false;
-            movement.thrust = THRUST_ACCELERATION_RATE * 350.0;
+            movement.thrust = 40.0;
         }
     }
 }

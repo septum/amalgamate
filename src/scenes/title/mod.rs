@@ -4,9 +4,10 @@ use bevy::{
     app::AppExit,
     prelude::{Input, Plugin as BevyPlugin, *},
 };
+use bevy_ecs_ldtk::prelude::*;
 
 use crate::{
-    core::GameState,
+    core::{map, spawn_camera, GameState},
     resources::prelude::*,
     ui::{ActionKind, ActionMarker},
 };
@@ -15,6 +16,8 @@ pub struct Plugin;
 
 impl BevyPlugin for Plugin {
     fn build(&self, app: &mut App) {
+        app.insert_resource(LevelSelection::Index(0));
+
         app.add_system_set(SystemSet::on_enter(GameState::Title).with_system(setup))
             .add_system_set(
                 SystemSet::on_update(GameState::Title).with_system(buttons_interactions),
@@ -23,7 +26,9 @@ impl BevyPlugin for Plugin {
     }
 }
 
-fn setup(mut commands: Commands, fonts: Res<Fonts>) {
+fn setup(mut commands: Commands, fonts: Res<Fonts>, ldtk: Res<Ldtk>) {
+    spawn_camera(&mut commands);
+    map::spawn(&mut commands, &ldtk);
     ui::spawn(&mut commands, &fonts);
 }
 
@@ -52,13 +57,13 @@ fn buttons_interactions(
                     }
                 };
 
-                *color = Colors::DARK.into();
+                *color = Colors::PRIMARY.into();
             }
             Interaction::Hovered => {
                 *color = Colors::LIGHT.into();
             }
             Interaction::None => {
-                *color = Colors::PRIMARY.into();
+                *color = Colors::DARK.into();
             }
         }
     }

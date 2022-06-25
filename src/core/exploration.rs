@@ -36,13 +36,13 @@ pub fn beam(commands: &mut Commands, source: Vec2, target: Vec2) {
     let distance = source.distance(target);
     let beam = shapes::Line(source, target);
     let alpha = ((BEAM_MAX_DISTANCE - distance) / BEAM_MAX_DISTANCE).powf(2.0) - 0.008;
-    let color = *Colors::LIGHT.clone().set_a(alpha);
+    let color = *Colors::PRIMARY.clone().set_a(alpha);
 
     commands
         .spawn_bundle(GeometryBuilder::build_as(
             &beam,
             DrawMode::Stroke(StrokeMode::new(color, 2.0)),
-            Transform::default(),
+            Transform::from_xyz(0.0, 0.0, 4.0),
         ))
         .insert(BeamMarker);
 }
@@ -62,9 +62,9 @@ pub fn resonance(commands: &mut Commands, source: Vec2, target: Vec2) {
             &source_circle,
             DrawMode::Outlined {
                 fill_mode: FillMode::color(Colors::TRANSPARENT),
-                outline_mode: StrokeMode::new(Colors::PRIMARY, 4.0),
+                outline_mode: StrokeMode::new(Colors::PRIMARY, 2.0),
             },
-            Transform::from_xyz(source.x, source.y, 3.0),
+            Transform::from_xyz(source.x, source.y, 4.0),
         ))
         .insert(ResonanceMarker)
         .insert(SourceResonanceMarker);
@@ -78,9 +78,9 @@ pub fn resonance(commands: &mut Commands, source: Vec2, target: Vec2) {
             &target_circle,
             DrawMode::Outlined {
                 fill_mode: FillMode::color(Colors::TRANSPARENT),
-                outline_mode: StrokeMode::new(Colors::LIGHTER, 4.0),
+                outline_mode: StrokeMode::new(Colors::LIGHT, 2.0),
             },
-            Transform::from_xyz(target.x, target.y, 3.0),
+            Transform::from_xyz(target.x, target.y, 4.0),
         ))
         .insert(ResonanceMarker)
         .insert(TargetResonanceMarker);

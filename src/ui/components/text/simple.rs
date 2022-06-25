@@ -12,7 +12,7 @@ impl Default for Simple {
     fn default() -> Simple {
         let style = TextStyle {
             font_size: MEDIUM_SIZE,
-            color: Colors::LIGHT,
+            color: Colors::PRIMARY,
             font: Handle::default(),
         };
 
