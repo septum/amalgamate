@@ -5,13 +5,17 @@ use crate::{
             self, BeamMarker, Exploration, ResonanceMarker, SourceResonanceMarker,
             TargetResonanceMarker,
         },
-        movement::{self, Movement},
-        spawn_camera, spawn_npc, spawn_player, CameraMarker, GameState, NpcMarker, PlayerMarker,
+        interaction::{self, Interaction},
+        movement::{self, Movement, ROTATION_ACCELERATION_RATE, THRUST_ACCELERATION_RATE},
+        physics, spawn_camera, spawn_npc, spawn_player, CameraMarker, GameState, NpcMarker,
+        PlayerMarker,
     },
     resources::prelude::*,
 };
-use bevy::prelude::{Plugin as BevyPlugin, *};
-
+use bevy::{
+    app::AppExit,
+    prelude::{Plugin as BevyPlugin, *},
+};
 pub struct Plugin;
 
 impl BevyPlugin for Plugin {
@@ -26,31 +30,37 @@ impl BevyPlugin for Plugin {
             resonance: false,
         });
 
+        app.insert_resource(Interaction { orbit: false });
+
         app.add_system_set(SystemSet::on_enter(GameState::Play).with_system(setup))
             .add_system_set(
                 SystemSet::on_update(GameState::Play)
                     .with_system(handle_input)
-                    .with_system(follow_player)
                     .with_system(process_movement)
+                    .with_system(gravitational_attraction)
+                    .with_system(entity_collision)
                     .with_system(beam_reflection)
                     .with_system(resonance_proximity)
                     .with_system(update_source_resonance)
-                    .with_system(dissipate_resonance),
+                    .with_system(dissipate_resonance)
+                    .with_system(orbit_criteria)
+                    .with_system(orbit_resonance)
+                    .with_system(orbit_absorption),
             );
     }
 }
 
 fn setup(mut commands: Commands, images: Res<Images>) {
     let npc_positions: [Vec3; 5] = [
-        Vec3::new(0.0, 128.0, 5.0),
-        Vec3::new(320.0, 0.0, 5.0),
+        Vec3::new(0.0, 280.0, 5.0),
+        Vec3::new(320.0, -560.0, 5.0),
         Vec3::new(600.0, -200.0, 5.0),
         Vec3::new(-2200.0, -200.0, 5.0),
         Vec3::new(-2400.0, 400.0, 5.0),
     ];
     spawn_camera(&mut commands);
     spawn_player(&mut commands, &images);
-    for npc_position in npc_positions.into_iter() {
+    for npc_position in npc_positions {
         spawn_npc(
             &mut commands,
             Transform::from_translation(npc_position),
@@ -61,29 +71,68 @@ fn setup(mut commands: Commands, images: Res<Images>) {
 
 fn handle_input(
     keyboard_input: Res<Input<KeyCode>>,
+    mut interaction: ResMut<Interaction>,
     mut movement: ResMut<Movement>,
     mut exploration: ResMut<Exploration>,
 ) {
     movement::handle_input(&keyboard_input, &mut movement);
     exploration::handle_input(&keyboard_input, &mut exploration);
-}
-
-fn follow_player(
-    player_query: Query<&Transform, With<PlayerMarker>>,
-    mut camera_query: Query<&mut Transform, (With<CameraMarker>, Without<PlayerMarker>)>,
-) {
-    let player_transform = player_query.single();
-    let mut camera_transform = camera_query.single_mut();
-    camera_follow(&mut camera_transform, &player_transform);
+    interaction::handle_input(&keyboard_input, &mut interaction);
 }
 
 fn process_movement(
     time: Res<Time>,
     movement: Res<Movement>,
     mut player_query: Query<&mut Transform, With<PlayerMarker>>,
+    mut camera_query: Query<&mut Transform, (With<CameraMarker>, Without<PlayerMarker>)>,
 ) {
-    let mut transform = player_query.single_mut();
-    movement::process(&mut transform, &movement, time.delta_seconds());
+    let mut player_transform = player_query.single_mut();
+    movement::process(&mut player_transform, &movement, time.delta_seconds());
+
+    let mut camera_transform = camera_query.single_mut();
+    camera_follow(&mut camera_transform, &player_transform);
+}
+
+fn gravitational_attraction(
+    time: Res<Time>,
+    interaction: Res<Interaction>,
+    mut player_query: Query<&mut Transform, With<PlayerMarker>>,
+    npcs_query: Query<&Transform, (With<NpcMarker>, Without<PlayerMarker>)>,
+) {
+    if !interaction.orbit {
+        let mut player_transform = player_query.single_mut();
+        for npc_transform in npcs_query.iter() {
+            let source = player_transform.translation.truncate();
+            let target = npc_transform.translation.truncate();
+            let size = Vec2::splat(192.0);
+
+            if physics::collision(source, size, target, size) {
+                physics::deviate_trajectory(
+                    &mut player_transform.translation,
+                    &npc_transform.translation,
+                    time.delta_seconds(),
+                );
+            }
+        }
+    }
+}
+
+fn entity_collision(
+    mut exit_event: EventWriter<AppExit>,
+    player_query: Query<&Transform, With<PlayerMarker>>,
+    npcs_query: Query<&Transform, (With<NpcMarker>, Without<PlayerMarker>)>,
+) {
+    let player_transform = player_query.single();
+    for npc_transform in npcs_query.iter() {
+        let source = player_transform.translation.truncate();
+        let target = npc_transform.translation.truncate();
+        let size = Vec2::splat(60.0);
+
+        if physics::collision(source, size, target, size) {
+            // TODO: Do something interesting
+            exit_event.send(AppExit);
+        }
+    }
 }
 
 fn beam_reflection(
@@ -111,19 +160,22 @@ fn beam_reflection(
 
 fn resonance_proximity(
     mut commands: Commands,
+    interaction: Res<Interaction>,
     mut exploration: ResMut<Exploration>,
     player_query: Query<&Transform, With<PlayerMarker>>,
     npcs_query: Query<&Transform, With<NpcMarker>>,
 ) {
-    if !exploration.resonance {
-        let player_transform = player_query.single();
-        for npc_transform in npcs_query.iter() {
-            let source = player_transform.translation.truncate();
-            let target = npc_transform.translation.truncate();
-            exploration.resonance = exploration::in_resonance(source, target);
-            if exploration.resonance {
-                exploration::resonance(&mut commands, source, target);
-                break;
+    if !interaction.orbit {
+        if !exploration.resonance {
+            let player_transform = player_query.single();
+            for npc_transform in npcs_query.iter() {
+                let source = player_transform.translation.truncate();
+                let target = npc_transform.translation.truncate();
+                exploration.resonance = exploration::in_resonance(source, target);
+                if exploration.resonance {
+                    exploration::resonance(&mut commands, source, target);
+                    break;
+                }
             }
         }
     }
@@ -146,20 +198,103 @@ fn update_source_resonance(
 fn dissipate_resonance(
     mut commands: Commands,
     mut exploration: ResMut<Exploration>,
+    interaction: Res<Interaction>,
     player_query: Query<&Transform, With<PlayerMarker>>,
     target_resonance_query: Query<&Transform, With<TargetResonanceMarker>>,
     resonance_query: Query<Entity, With<ResonanceMarker>>,
 ) {
-    if exploration.resonance {
-        let player_transform = player_query.single();
-        if let Ok(target_transform) = target_resonance_query.get_single() {
-            let source = player_transform.translation.truncate();
-            let target = target_transform.translation.truncate();
-            exploration.resonance = exploration::in_resonance(source, target);
+    if !interaction.orbit {
+        if exploration.resonance {
+            let player_transform = player_query.single();
+            if let Ok(target_transform) = target_resonance_query.get_single() {
+                let source = player_transform.translation.truncate();
+                let target = target_transform.translation.truncate();
+                exploration.resonance = exploration::in_resonance(source, target);
+            }
+        } else {
+            for resonance_entity in resonance_query.iter() {
+                commands.entity(resonance_entity).despawn_recursive();
+            }
         }
-    } else {
-        for resonance_entity in resonance_query.iter() {
-            commands.entity(resonance_entity).despawn_recursive();
+    }
+}
+
+fn orbit_criteria(
+    mut interaction: ResMut<Interaction>,
+    movement: Res<Movement>,
+    exploration: Res<Exploration>,
+    source_resonance_query: Query<&Transform, With<SourceResonanceMarker>>,
+    target_resonance_query: Query<&Transform, With<TargetResonanceMarker>>,
+) {
+    if exploration.resonance && exploration.beam && movement.thrust <= 35.0 {
+        if let Ok(source_transform) = source_resonance_query.get_single() {
+            if let Ok(target_transform) = target_resonance_query.get_single() {
+                let source = source_transform.translation.truncate();
+                let target = target_transform.translation.truncate();
+                let distance = source.distance(target);
+                if distance <= 160.0 && distance >= 128.0 {
+                    interaction.orbit = true;
+                }
+            }
+        }
+    }
+}
+
+fn orbit_resonance(
+    mut movement: ResMut<Movement>,
+    interaction: Res<Interaction>,
+    mut player_query: Query<&mut Transform, With<PlayerMarker>>,
+    target_resonance_query: Query<&Transform, (With<TargetResonanceMarker>, Without<PlayerMarker>)>,
+) {
+    if interaction.orbit {
+        let mut player_transform = player_query.single_mut();
+        if let Ok(target_transform) = target_resonance_query.get_single() {
+            let mut source: Vec2 = player_transform.translation.truncate();
+            let target: Vec2 = target_transform.translation.truncate();
+            source -= target;
+
+            // half radian
+            let angle: f32 = 0.0085;
+            let cos = angle.cos();
+            let sin = angle.sin();
+            let new_x = (source.x * cos - source.y * sin) + target.x;
+            let new_y = (source.x * sin + source.y * cos) + target.y;
+            player_transform.translation.x = new_x;
+            player_transform.translation.y = new_y;
+            movement.rotation = -(ROTATION_ACCELERATION_RATE * 500.0);
+        }
+    }
+}
+
+fn orbit_absorption(
+    mut commands: Commands,
+    time: Res<Time>,
+    mut movement: ResMut<Movement>,
+    mut interaction: ResMut<Interaction>,
+    mut exploration: ResMut<Exploration>,
+    mut npcs_query: Query<(&mut Transform, Entity), With<NpcMarker>>,
+    target_resonance_query: Query<
+        (&Transform, Entity),
+        (With<TargetResonanceMarker>, Without<NpcMarker>),
+    >,
+) {
+    if interaction.orbit {
+        if let Ok((target_transform, target_entity)) = target_resonance_query.get_single() {
+            for (mut npc_transform, npc_entity) in npcs_query.iter_mut() {
+                if target_transform.translation.x.floor() == npc_transform.translation.x.floor()
+                    && target_transform.translation.y.floor() == npc_transform.translation.y.floor()
+                {
+                    npc_transform.scale -= 0.05 * time.delta_seconds();
+                    if npc_transform.scale.x < 0.0 || npc_transform.scale.y < 0.0 {
+                        commands.entity(npc_entity).despawn_recursive();
+                        commands.entity(target_entity).despawn_recursive();
+                        exploration.resonance = false;
+                    }
+                }
+            }
+        } else if !exploration.resonance {
+            interaction.orbit = false;
+            movement.thrust = THRUST_ACCELERATION_RATE * 350.0;
         }
     }
 }

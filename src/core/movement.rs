@@ -2,8 +2,8 @@
 
 use bevy::prelude::*;
 
-const ROTATION_ACCELERATION_RATE: f32 = 0.005;
-const THRUST_ACCELERATION_RATE: f32 = 0.1;
+pub const ROTATION_ACCELERATION_RATE: f32 = 0.005;
+pub const THRUST_ACCELERATION_RATE: f32 = 0.1;
 
 pub struct Movement {
     pub rotation: f32,

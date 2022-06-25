@@ -4,7 +4,9 @@ mod player;
 mod state;
 
 pub mod exploration;
+pub mod interaction;
 pub mod movement;
+pub mod physics;
 
 pub use camera::{follow as camera_follow, spawn as spawn_camera, Marker as CameraMarker};
 pub use npc::{spawn as spawn_npc, Marker as NpcMarker};

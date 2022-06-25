@@ -4,7 +4,7 @@ use bevy_prototype_lyon::prelude::*;
 use crate::resources::prelude::Colors;
 
 const BEAM_MAX_DISTANCE: f32 = 800.0;
-const RESONANCE_MIN_DISTANCE: f32 = 128.0;
+const RESONANCE_MIN_DISTANCE: f32 = 160.0;
 
 pub struct Exploration {
     pub beam: bool,
@@ -27,6 +27,7 @@ pub fn handle_input(keyboard_input: &Input<KeyCode>, exploration: &mut Explorati
     exploration.beam = keyboard_input.just_pressed(KeyCode::Space);
 }
 
+#[must_use]
 pub fn beam_reflected(source: Vec2, target: Vec2) -> bool {
     source.distance(target) <= BEAM_MAX_DISTANCE
 }
@@ -46,13 +47,14 @@ pub fn beam(commands: &mut Commands, source: Vec2, target: Vec2) {
         .insert(BeamMarker);
 }
 
+#[must_use]
 pub fn in_resonance(source: Vec2, target: Vec2) -> bool {
     source.distance(target) <= RESONANCE_MIN_DISTANCE
 }
 
 pub fn resonance(commands: &mut Commands, source: Vec2, target: Vec2) {
     let source_circle = shapes::Circle {
-        radius: 128.0,
+        radius: 160.0,
         center: Vec2::ZERO,
     };
     commands
@@ -60,7 +62,7 @@ pub fn resonance(commands: &mut Commands, source: Vec2, target: Vec2) {
             &source_circle,
             DrawMode::Outlined {
                 fill_mode: FillMode::color(Colors::TRANSPARENT),
-                outline_mode: StrokeMode::new(Colors::PRIMARY, 2.0),
+                outline_mode: StrokeMode::new(Colors::PRIMARY, 4.0),
             },
             Transform::from_xyz(source.x, source.y, 3.0),
         ))
@@ -68,7 +70,7 @@ pub fn resonance(commands: &mut Commands, source: Vec2, target: Vec2) {
         .insert(SourceResonanceMarker);
 
     let target_circle = shapes::Circle {
-        radius: 128.0,
+        radius: 160.0,
         center: Vec2::ZERO,
     };
     commands
@@ -76,7 +78,7 @@ pub fn resonance(commands: &mut Commands, source: Vec2, target: Vec2) {
             &target_circle,
             DrawMode::Outlined {
                 fill_mode: FillMode::color(Colors::TRANSPARENT),
-                outline_mode: StrokeMode::new(Colors::LIGHTER, 2.0),
+                outline_mode: StrokeMode::new(Colors::LIGHTER, 4.0),
             },
             Transform::from_xyz(target.x, target.y, 3.0),
         ))
