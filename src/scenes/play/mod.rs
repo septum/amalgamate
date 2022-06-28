@@ -1,6 +1,5 @@
 use crate::{
     core::{
-        camera_follow,
         exploration::{
             self, BeamMarker, Exploration, ResonanceMarker, SourceResonanceMarker,
             TargetResonanceMarker,
@@ -80,14 +79,29 @@ fn handle_input(
 fn process_movement(
     time: Res<Time>,
     movement: Res<Movement>,
+    mut windows: ResMut<Windows>,
     mut player_query: Query<&mut Transform, With<PlayerMarker>>,
     mut camera_query: Query<&mut Transform, (With<CameraMarker>, Without<PlayerMarker>)>,
 ) {
     let mut player_transform = player_query.single_mut();
     movement::process(&mut player_transform, &movement, time.delta_seconds());
 
-    let mut camera_transform = camera_query.single_mut();
-    camera_follow(&mut camera_transform, &player_transform);
+    let window = windows.get_primary_mut().unwrap();
+    let half_window_width = window.width() / 2.0;
+    if player_transform.translation.x < (4_096.0 - half_window_width)
+        && player_transform.translation.x > (-4_096.0 + half_window_width)
+    {
+        let mut camera_transform = camera_query.single_mut();
+        camera_transform.translation.x = player_transform.translation.x;
+    }
+
+    let half_window_height = window.height() / 2.0;
+    if player_transform.translation.y < (4_096.0 - half_window_height)
+        && player_transform.translation.y > (-4_096.0 + half_window_height)
+    {
+        let mut camera_transform = camera_query.single_mut();
+        camera_transform.translation.y = player_transform.translation.y;
+    }
 }
 
 fn gravitational_attraction(
