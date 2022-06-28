@@ -34,7 +34,7 @@ impl Sounds {
             absorption: asset_server.load("sounds/fx/absorption.wav"),
         };
         let music = Music {
-            ambiment: asset_server.load("sounds/music/ambiment.mp3"),
+            ambiment: asset_server.load("sounds/music/ambiment.wav"),
         };
 
         Sounds {

@@ -37,6 +37,7 @@ fn setup(
     let audio_source = sounds.music.ambiment.clone();
     let channel_id = &sounds.channels.music;
     audio.play_looped_in_channel(audio_source, channel_id);
+    audio.set_volume_in_channel(0.5, channel_id);
 
     spawn_camera(&mut commands);
     map::spawn(&mut commands, &ldtk);

@@ -48,40 +48,40 @@ jobs:
         with:
           command: check
 
-  # build-wasm:
-  #   strategy:
-  #     matrix:
-  #       toolchain: [stable, nightly]
-  #       os: [ubuntu-latest]
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - uses: actions/checkout@v2
+  build-wasm:
+    strategy:
+      matrix:
+        toolchain: [stable, nightly]
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
 
-  #     - uses: actions/cache@v2
-  #       with:
-  #         path: |
-  #           ~/.cargo/bin/
-  #           ~/.cargo/registry/index/
-  #           ~/.cargo/registry/cache/
-  #           ~/.cargo/git/db/
-  #           target/
-  #         key: ${{ runner.os }}-cargo-build-wasm-${{ matrix.toolchain }}-${{ hashFiles('**/Cargo.lock') }}
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-build-wasm-${{ matrix.toolchain }}-${{ hashFiles('**/Cargo.lock') }}
 
-  #     - uses: actions-rs/toolchain@v1
-  #       with:
-  #         toolchain: ${{ matrix.toolchain }}
-  #         target: wasm32-unknown-unknown
-  #         override: true
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.toolchain }}
+          target: wasm32-unknown-unknown
+          override: true
 
-  #     - name: Remove local cargo config
-  #       run: rm .cargo/config.toml
-  #       if: matrix.toolchain == 'stable'
+      - name: Remove local cargo config
+        run: rm .cargo/config.toml
+        if: matrix.toolchain == 'stable'
 
-  #     - name: Check wasm
-  #       uses: actions-rs/cargo@v1
-  #       with:
-  #         command: check
-  #         args: --target wasm32-unknown-unknown --no-default-features --features bevy/bevy_winit,bevy/x11,bevy/hdr,bevy/bevy_gltf
+      - name: Check wasm
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+          args: --target wasm32-unknown-unknown --no-default-features --features bevy/bevy_winit,bevy/x11,bevy/hdr,bevy/bevy_gltf
 
   lint:
     runs-on: ubuntu-latest

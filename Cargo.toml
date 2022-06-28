@@ -28,4 +28,4 @@ features = ["bevy_gilrs", "bevy_winit", "render", "png", "hdr", "x11", "filesyst
 [dependencies.bevy_kira_audio]
 version = "0.9.0"
 default-features = false
-features = ["wav", "mp3"]
+features = ["wav"]
